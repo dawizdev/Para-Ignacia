@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Puedo escuchar el mar — para Ignacia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ocean-deep: #0a1628;
+      --gold:       #d4a853;
+      --gold-light: #e8c97a;
+      --white:      #ffffff;
+      --text-main:  #f0e8d8;
+      --text-muted: #8baec4;
+      --sand:       #f5e6c8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ocean-deep);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .ocean-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(180deg, #050e1c 0%, #0a1e35 30%, #0e2a48 60%, #112f52 100%);
+      overflow: hidden;
+    }
+
+    .stars {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 8%,  rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 40% 20%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 5%,  rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 12%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 85% 7%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 18%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 35%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 78% 28%, rgba(255,255,255,0.3) 0%, transparent 100%);
+    }
+
+    .wave {
+      position: absolute;
+      bottom: 0;
+      left: -50%;
+      width: 200%;
+      border-radius: 40%;
+      opacity: 0.07;
+      animation: wave-anim linear infinite;
+    }
+    .wave-1 { height: 180px; background: #4a9eca; animation-duration: 14s; bottom: -60px; }
+    .wave-2 { height: 160px; background: #3a8ab8; animation-duration: 18s; bottom: -80px; animation-delay: -5s; opacity: 0.05; }
+    .wave-3 { height: 140px; background: #5ab0d8; animation-duration: 22s; bottom: -100px; animation-delay: -10s; opacity: 0.04; }
+
+    @keyframes wave-anim {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+
+    .dedicatoria {
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .titulo-jp {
+      font-family: serif;
+      font-size: 28px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.15em;
+    }
+
+    .titulo-es {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 6vw, 58px);
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    .titulo-es em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .subtitulo {
+      font-size: 14px;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.4;
+      margin: 28px auto;
+    }
+
+    .mensaje {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(15px, 2vw, 17px);
+      color: var(--sand);
+      line-height: 1.8;
+      max-width: 520px;
+      margin: 0 auto 16px;
+      opacity: 0.85;
+    }
+
+    .firma {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ── Player ── */
+    .player-section {
+      margin-bottom: 16px;
+    }
+
+    .player-label {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .player-wrapper {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* Plyr theming */
+    .plyr {
+      --plyr-color-main: #d4a853;
+      --plyr-font-family: 'Inter', sans-serif;
+      --plyr-range-fill-background: #d4a853;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .subtitles-hint {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      opacity: 0.7;
+    }
+
+    .subtitles-hint span {
+      display: inline-block;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      padding: 2px 10px;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    /* ── Info ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .info-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 16px 20px;
+      text-align: center;
+    }
+
+    .info-card .label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .info-card .valor {
+      font-size: 15px;
+      color: var(--text-main);
+    }
+
+    /* ── Sinopsis ── */
+    .sinopsis {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 32px 36px;
+      margin-bottom: 48px;
+    }
+
+    .sinopsis h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      font-weight: 400;
+    }
+
+    .sinopsis p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text-muted);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer p {
+      font-size: 12px;
+      color: rgba(139,174,196,0.5);
+      line-height: 1.8;
+    }
+
+    .footer .heart { color: var(--gold); }
+
+    @media (max-width: 480px) {
+      .page { padding: 40px 16px 60px; }
+      .sinopsis { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="ocean-bg">
+  <div class="stars"></div>
+  <div class="wave wave-1"></div>
+  <div class="wave wave-2"></div>
+  <div class="wave wave-3"></div>
+</div>
+
+<main class="page">
+
+  <header class="header">
+    <p class="dedicatoria">Una película para ti</p>
+    <p class="titulo-jp">海がきこえる</p>
+    <h1 class="titulo-es"><em>Puedo escuchar</em> el mar</h1>
+    <p class="subtitulo">Studio Ghibli · 1993</p>
+    <div class="divider"></div>
+    <p class="mensaje">
+      Pensé en ti cuando encontré esta película.<br>
+      Espero que la disfrutes tanto como yo quería que la vieras.
+    </p>
+    <p class="firma">— con cariño</p>
+  </header>
+
+  <section class="player-section">
+    <p class="player-label">Reproducir película</p>
+    <div class="player-wrapper">
+      <video id="player" playsinline controls crossorigin="anonymous">
+        <source
+          src="pelicula.mp4"
+          type="video/mp4"
+        />
+        <track
+          kind="subtitles"
+          label="Español"
+          srclang="es"
+          src="subtitulos.vtt"
+          default
+        />
+      </video>
+    </div>
+  </section>
+
+  <p class="subtitles-hint">
+    Activa o desactiva los subtítulos con el botón <span>CC</span> en el reproductor
+  </p>
+
+  <section class="info-grid">
+    <div class="info-card">
+      <p class="label">Año</p>
+      <p class="valor">1993</p>
+    </div>
+    <div class="info-card">
+      <p class="label">Duración</p>
+      <p class="valor">72 minutos</p>
+    </div>
+    <div class="info-card">
+      <p class="label">Director</p>
+      <p class="valor">Tomomi Mochizuki</p>
+    </div>
+    <div class="info-card">
+      <p class="label">Estudio</p>
+      <p class="valor">Studio Ghibli</p>
+    </div>
+  </section>
+
+  <section class="sinopsis">
+    <h2>De qué va</h2>
+    <p>
+      Taku Morisaki, un estudiante de preparatoria en Kochi, recuerda los años
+      en que conoció a Rikako Muto, una chica recién llegada de Tokio. Entre
+      viajes en tren, la brisa del Pacífico y la distancia que separa dos mundos
+      distintos, nació algo que ninguno de los dos supo nombrar a tiempo.
+      Una historia pequeña y honesta sobre el primer amor y las cosas que
+      uno carga sin darse cuenta.
+    </p>
+  </section>
+
+  <footer class="footer">
+    <p>
+      Hecha con <span class="heart">♡</span> especialmente para ti.<br>
+      Disfruta la película.
+    </p>
+  </footer>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.min.js"></script>
+<script>
+  const player = new Plyr('#player', {
+    captions: { active: true, language: 'es', update: true },
+    controls: [
+      'play-large',
+      'play',
+      'rewind',
+      'fast-forward',
+      'progress',
+      'current-time',
+      'duration',
+      'mute',
+      'volume',
+      'captions',
+      'fullscreen'
+    ],
+    i18n: {
+      play:        'Reproducir',
+      pause:       'Pausar',
+      mute:        'Silenciar',
+      unmute:      'Activar sonido',
+      captions:    'Subtítulos',
+      fullscreen:  'Pantalla completa',
+      exitFullscreen: 'Salir de pantalla completa',
+    }
+  });
+</script>
+
+</body>
+</html>
