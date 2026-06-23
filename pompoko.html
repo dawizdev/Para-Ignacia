@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pompoko — para Ignacia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Zen+Antique&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --forest-deep:  #080f09;
+      --gold:         #c8973a;
+      --gold-light:   #e8c46a;
+      --white:        #ffffff;
+      --text-main:    #deecd5;
+      --text-muted:   #6b9e78;
+      --cream:        #f2e8cc;
+      --moss:         #3a6b47;
+      --bark:         #5c3d1e;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--forest-deep);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════
+       FONDO BOSQUE NOCTURNO
+    ══════════════════════════════ */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    /* Gradiente de cielo nocturno */
+    .bg-sky {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%,
+        #1a2e10 0%, #0e1f0a 40%, #060d04 100%);
+    }
+
+    /* Luna llena */
+    .moon {
+      position: absolute;
+      top: 6%;
+      right: 12%;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 35%,
+        #fffde8 0%, #f5e89a 40%, #e8d060 100%);
+      box-shadow:
+        0 0 40px 15px rgba(240,220,80,0.15),
+        0 0 80px 30px rgba(240,220,80,0.08);
+    }
+    .moon::after {
+      content: '';
+      position: absolute;
+      top: 12px; left: 18px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: rgba(180,160,40,0.25);
+    }
+
+    /* Estrellas */
+    .stars {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at  5%  8%, rgba(255,255,200,0.8) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 15% 4%, rgba(255,255,220,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 28% 10%, rgba(255,255,200,0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 40%  3%, rgba(255,255,220,0.5) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 55%  7%, rgba(255,255,200,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 68%  2%, rgba(255,255,220,0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 78% 11%, rgba(255,255,200,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 20% 22%, rgba(255,255,220,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 45% 18%, rgba(255,255,200,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 62% 15%, rgba(255,255,220,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 88%  5%, rgba(255,255,200,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 95% 14%, rgba(255,255,220,0.4) 0%, transparent 100%);
+      animation: twinkle 6s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      0%   { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+
+    /* Niebla del bosque */
+    .mist {
+      position: absolute;
+      bottom: 0;
+      left: -20%;
+      width: 140%;
+      height: 35%;
+      background: radial-gradient(ellipse 60% 100% at 50% 100%,
+        rgba(30,60,20,0.5) 0%, transparent 100%);
+      animation: mist-drift 20s ease-in-out infinite alternate;
+    }
+    @keyframes mist-drift {
+      0%   { transform: translateX(0); opacity: 0.5; }
+      100% { transform: translateX(5%); opacity: 0.8; }
+    }
+
+    /* Siluetas de árboles SVG-like con CSS */
+    .treeline {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+    }
+
+    .tree {
+      position: absolute;
+      bottom: 0;
+      background: #040804;
+    }
+    /* Troncos y copas usando clip-path */
+    .tree-trunk {
+      position: absolute;
+      bottom: 0;
+      background: #030603;
+    }
+    .tree-crown {
+      position: absolute;
+      background: #040a04;
+      border-radius: 50% 50% 0 0;
+    }
+
+    /* Árbol 1 - izquierda grande */
+    .t1-trunk { width: 14px; height: 160px; left: 6%; bottom: 0; }
+    .t1-crown { width: 90px; height: 130px; left: calc(6% - 38px); bottom: 130px; }
+
+    /* Árbol 2 - izquierda pequeño */
+    .t2-trunk { width: 10px; height: 110px; left: 14%; bottom: 0; }
+    .t2-crown { width: 65px; height: 95px; left: calc(14% - 28px); bottom: 90px; }
+
+    /* Árbol 3 - izquierda medio */
+    .t3-trunk { width: 12px; height: 140px; left: 22%; bottom: 0; }
+    .t3-crown { width: 80px; height: 115px; left: calc(22% - 34px); bottom: 115px; }
+
+    /* Árbol 4 - derecha grande */
+    .t4-trunk { width: 16px; height: 175px; right: 7%; bottom: 0; }
+    .t4-crown { width: 100px; height: 145px; right: calc(7% - 42px); bottom: 145px; }
+
+    /* Árbol 5 - derecha medio */
+    .t5-trunk { width: 11px; height: 125px; right: 17%; bottom: 0; }
+    .t5-crown { width: 72px; height: 105px; right: calc(17% - 31px); bottom: 105px; }
+
+    /* Árbol 6 - derecha pequeño */
+    .t6-trunk { width: 9px; height: 95px; right: 26%; bottom: 0; }
+    .t6-crown { width: 58px; height: 82px; right: calc(26% - 25px); bottom: 80px; }
+
+    /* Luciérnagas */
+    .firefly {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #aeff60;
+      box-shadow: 0 0 6px 3px rgba(174,255,96,0.6);
+      animation: firefly-float linear infinite;
+      opacity: 0;
+    }
+    .f1  { left: 8%;  top: 55%; animation-duration: 7s;  animation-delay: 0s; }
+    .f2  { left: 18%; top: 62%; animation-duration: 9s;  animation-delay: 1.5s; }
+    .f3  { left: 30%; top: 50%; animation-duration: 6s;  animation-delay: 3s; }
+    .f4  { left: 70%; top: 58%; animation-duration: 8s;  animation-delay: 0.8s; }
+    .f5  { left: 80%; top: 48%; animation-duration: 10s; animation-delay: 2.2s; }
+    .f6  { left: 90%; top: 65%; animation-duration: 7s;  animation-delay: 4s; }
+    .f7  { left: 50%; top: 72%; animation-duration: 11s; animation-delay: 1s; }
+    .f8  { left: 42%; top: 45%; animation-duration: 8s;  animation-delay: 3.5s; }
+
+    @keyframes firefly-float {
+      0%   { opacity: 0; transform: translate(0,0); }
+      15%  { opacity: 0.9; }
+      50%  { opacity: 0.6; transform: translate(20px, -30px); }
+      85%  { opacity: 0.8; }
+      100% { opacity: 0; transform: translate(-10px, -60px); }
+    }
+
+    /* Hojas cayendo */
+    .leaf {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      top: -20px;
+      opacity: 0;
+      animation: leaf-fall linear infinite;
+    }
+    .leaf::before {
+      content: '🍃';
+      font-size: 12px;
+    }
+    .l1 { left: 7%;  animation-duration: 12s; animation-delay: 0s; }
+    .l2 { left: 22%; animation-duration: 9s;  animation-delay: 3s; }
+    .l3 { left: 38%; animation-duration: 14s; animation-delay: 1s; }
+    .l4 { left: 55%; animation-duration: 10s; animation-delay: 5s; }
+    .l5 { left: 72%; animation-duration: 11s; animation-delay: 2s; }
+    .l6 { left: 87%; animation-duration: 8s;  animation-delay: 7s; }
+
+    @keyframes leaf-fall {
+      0%   { transform: translateY(0) rotate(0deg) translateX(0);   opacity: 0; }
+      10%  { opacity: 0.8; }
+      50%  { transform: translateY(50vh) rotate(180deg) translateX(30px); opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(100vh) rotate(360deg) translateX(-20px); opacity: 0; }
+    }
+
+    /* ══════════════════════════════
+       LAYOUT
+    ══════════════════════════════ */
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 52px 24px 80px;
+    }
+
+    /* ── Nav ── */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    nav a {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 8px 22px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-muted);
+      transition: all 0.25s;
+      backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.2);
+    }
+    nav a:hover {
+      color: var(--text-main);
+      border-color: rgba(255,255,255,0.25);
+      background: rgba(0,0,0,0.35);
+    }
+    nav a.active {
+      background: rgba(58,107,71,0.3);
+      border-color: var(--moss);
+      color: #b8e6b0;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .dedicatoria {
+      font-size: 12px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    /* Kanji con fuente japonesa */
+    .titulo-jp {
+      font-family: 'Zen Antique', serif;
+      font-size: 22px;
+      color: rgba(139,198,120,0.5);
+      margin-bottom: 8px;
+      letter-spacing: 0.2em;
+    }
+
+    .titulo-es {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(52px, 9vw, 88px);
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 4px;
+      text-shadow: 0 0 60px rgba(100,180,80,0.15);
+    }
+
+    .titulo-sub {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(14px, 2vw, 18px);
+      color: var(--gold-light);
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+
+    .subtitulo {
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin: 28px auto;
+      max-width: 320px;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200,151,58,0.4));
+    }
+    .divider::after {
+      background: linear-gradient(270deg, transparent, rgba(200,151,58,0.4));
+    }
+    .divider-icon { font-size: 18px; }
+
+    .mensaje {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(14px, 2vw, 16px);
+      color: var(--cream);
+      line-height: 1.9;
+      max-width: 500px;
+      margin: 0 auto 16px;
+      opacity: 0.8;
+    }
+    .firma { font-size: 12px; color: var(--text-muted); }
+
+    /* ── Player ── */
+    .player-section { margin-bottom: 12px; }
+    .player-label {
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .player-wrapper {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(100,180,80,0.12);
+      box-shadow: 0 0 40px rgba(60,120,40,0.1);
+      background: #000;
+    }
+    video {
+      width: 100%;
+      display: block;
+      max-height: 520px;
+      background: #000;
+    }
+
+    /* ── Info cards ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 14px;
+      margin-bottom: 38px;
+      margin-top: 28px;
+    }
+    .info-card {
+      background: rgba(30,60,20,0.25);
+      border: 1px solid rgba(100,160,80,0.12);
+      border-radius: 12px;
+      padding: 16px 18px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+    }
+    .info-card .label {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .info-card .valor { font-size: 14px; color: var(--text-main); }
+
+    /* ── Sinopsis ── */
+    .sinopsis {
+      background: rgba(10,20,8,0.6);
+      border: 1px solid rgba(100,160,80,0.1);
+      border-radius: 16px;
+      padding: 32px 36px;
+      margin-bottom: 48px;
+      backdrop-filter: blur(6px);
+      position: relative;
+      overflow: hidden;
+    }
+    .sinopsis::before {
+      content: '🦝';
+      position: absolute;
+      right: 24px;
+      top: 20px;
+      font-size: 36px;
+      opacity: 0.12;
+    }
+    .sinopsis h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+      font-weight: 400;
+    }
+    .sinopsis p {
+      font-size: 14.5px;
+      line-height: 1.9;
+      color: rgba(180,210,160,0.75);
+    }
+
+    /* ── Datos curiosos ── */
+    .datos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 48px;
+    }
+    .dato {
+      background: rgba(10,20,8,0.5);
+      border: 1px solid rgba(100,160,80,0.08);
+      border-radius: 12px;
+      padding: 18px 20px;
+      backdrop-filter: blur(4px);
+    }
+    .dato-icon { font-size: 20px; margin-bottom: 8px; }
+    .dato h3 {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+      font-weight: 400;
+    }
+    .dato p { font-size: 13px; color: rgba(180,210,160,0.65); line-height: 1.7; }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid rgba(100,160,80,0.1);
+    }
+    .footer p { font-size: 12px; color: rgba(107,158,120,0.45); line-height: 1.9; }
+    .footer .heart { color: var(--gold); }
+
+    @media (max-width: 480px) {
+      .page { padding: 36px 16px 60px; }
+      .sinopsis { padding: 22px 18px; }
+      .titulo-es { font-size: 52px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg">
+  <div class="bg-sky"></div>
+  <div class="moon"></div>
+  <div class="stars"></div>
+  <div class="mist"></div>
+
+  <!-- Árboles -->
+  <div class="treeline">
+    <div class="tree tree-trunk t1-trunk"></div>
+    <div class="tree tree-crown t1-crown"></div>
+    <div class="tree tree-trunk t2-trunk"></div>
+    <div class="tree tree-crown t2-crown"></div>
+    <div class="tree tree-trunk t3-trunk"></div>
+    <div class="tree tree-crown t3-crown"></div>
+    <div class="tree tree-trunk t4-trunk"></div>
+    <div class="tree tree-crown t4-crown"></div>
+    <div class="tree tree-trunk t5-trunk"></div>
+    <div class="tree tree-crown t5-crown"></div>
+    <div class="tree tree-trunk t6-trunk"></div>
+    <div class="tree tree-crown t6-crown"></div>
+  </div>
+
+  <!-- Luciérnagas -->
+  <div class="firefly f1"></div>
+  <div class="firefly f2"></div>
+  <div class="firefly f3"></div>
+  <div class="firefly f4"></div>
+  <div class="firefly f5"></div>
+  <div class="firefly f6"></div>
+  <div class="firefly f7"></div>
+  <div class="firefly f8"></div>
+
+  <!-- Hojas -->
+  <div class="leaf l1"></div>
+  <div class="leaf l2"></div>
+  <div class="leaf l3"></div>
+  <div class="leaf l4"></div>
+  <div class="leaf l5"></div>
+  <div class="leaf l6"></div>
+</div>
+
+<main class="page">
+
+  <nav>
+    <a href="index.html">🌊 Puedo escuchar el mar</a>
+    <a href="pompoko.html" class="active">🌿 Pompoko</a>
+  </nav>
+
+  <header class="header">
+    <p class="dedicatoria">Una película para ti</p>
+    <p class="titulo-jp">平成狸合戦ぽんぽこ</p>
+    <h1 class="titulo-es">Pompoko</h1>
+    <p class="titulo-sub">La guerra de los mapaches</p>
+    <p class="subtitulo">Studio Ghibli · 1994</p>
+
+    <div class="divider"><span class="divider-icon">🌿</span></div>
+
+    <p class="mensaje">
+      A veces los que más quieren su hogar<br>
+      son los que más luchan por él.<br>
+      Esta es su historia.
+    </p>
+    <p class="firma">— con cariño</p>
+  </header>
+
+  <section class="player-section">
+    <p class="player-label">Reproducir película</p>
+    <div class="player-wrapper">
+      <video controls preload="metadata">
+        <source src="https://pub-0760c3d4fce447629c5c62cdf5ac345f.r2.dev/pompoko.mp4" type="video/mp4" />
+        Tu navegador no soporta la reproducción de video.
+      </video>
+    </div>
+  </section>
+
+  <section class="info-grid">
+    <div class="info-card"><p class="label">Año</p><p class="valor">1994</p></div>
+    <div class="info-card"><p class="label">Duración</p><p class="valor">119 minutos</p></div>
+    <div class="info-card"><p class="label">Director</p><p class="valor">Isao Takahata</p></div>
+    <div class="info-card"><p class="label">Estudio</p><p class="valor">Studio Ghibli</p></div>
+  </section>
+
+  <section class="sinopsis">
+    <h2>De qué va</h2>
+    <p>
+      En las colinas de Tama, a las afueras de Tokio, una colonia de tanuki —
+      los míticos mapaches del folclore japonés, capaces de transformarse en
+      cualquier cosa — ve cómo su bosque desaparece bajo las excavadoras de
+      una nueva urbanización. Desesperados, recuperan el antiguo arte de la
+      transformación y declaran su propia guerra silenciosa al mundo humano.
+      Una fábula tan divertida como melancólica, sobre la pérdida del hogar
+      y lo que hacemos para no olvidar quiénes somos.
+    </p>
+  </section>
+
+  <section class="datos">
+    <div class="dato">
+      <div class="dato-icon">🦝</div>
+      <h3>Los Tanuki</h3>
+      <p>Criaturas del folclore japonés con poderes de transformación. En la cultura popular son símbolo de buena suerte y travesuras.</p>
+    </div>
+    <div class="dato">
+      <div class="dato-icon">🌳</div>
+      <h3>Basada en hechos reales</h3>
+      <p>Las colinas de Tama fueron urbanizadas en los años 60–70. El film es un homenaje a ese paisaje perdido y a quienes vivían en él.</p>
+    </div>
+    <div class="dato">
+      <div class="dato-icon">🎨</div>
+      <h3>Isao Takahata</h3>
+      <p>Director de La tumba de las luciérnagas y Kaguya-hime. Su estilo es más realista y reflexivo que el de Miyazaki.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>
+      Hecha con <span class="heart">♡</span> especialmente para ti.<br>
+      Disfruta la película.
+    </p>
+  </footer>
+
+</main>
+</body>
+</html>

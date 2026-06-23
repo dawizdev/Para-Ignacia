@@ -63,97 +63,65 @@
       z-index: 1;
       max-width: 860px;
       margin: 0 auto;
-      padding: 60px 24px 80px;
+      padding: 52px 24px 80px;
     }
+
+    /* ── Nav ── */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    nav a {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 8px 22px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-muted);
+      transition: all 0.25s;
+      backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.2);
+    }
+    nav a:hover { color: var(--text-main); border-color: rgba(255,255,255,0.25); }
+    nav a.active {
+      background: rgba(26,58,92,0.4);
+      border-color: #4a9eca;
+      color: #b0d8f0;
+    }
+
     .header { text-align: center; margin-bottom: 52px; }
-    .dedicatoria {
-      font-size: 13px; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--text-muted); margin-bottom: 20px;
-    }
-    .titulo-jp {
-      font-family: serif; font-size: 28px;
-      color: var(--text-muted); margin-bottom: 6px; letter-spacing: 0.15em;
-    }
-    .titulo-es {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(36px, 6vw, 58px);
-      font-weight: 400; color: var(--white); line-height: 1.15; margin-bottom: 10px;
-    }
+    .dedicatoria { font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 20px; }
+    .titulo-jp { font-family: serif; font-size: 28px; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 0.15em; }
+    .titulo-es { font-family: 'Playfair Display', serif; font-size: clamp(36px, 6vw, 58px); font-weight: 400; color: var(--white); line-height: 1.15; margin-bottom: 10px; }
     .titulo-es em { font-style: italic; color: var(--gold-light); }
     .subtitulo { font-size: 14px; color: var(--text-muted); letter-spacing: 0.08em; }
     .divider { width: 60px; height: 1px; background: var(--gold); opacity: 0.4; margin: 28px auto; }
-    .mensaje {
-      font-family: 'Playfair Display', serif; font-style: italic;
-      font-size: clamp(15px, 2vw, 17px); color: var(--sand);
-      line-height: 1.8; max-width: 520px; margin: 0 auto 16px; opacity: 0.85;
-    }
+    .mensaje { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(15px, 2vw, 17px); color: var(--sand); line-height: 1.8; max-width: 520px; margin: 0 auto 16px; opacity: 0.85; }
     .firma { font-size: 13px; color: var(--text-muted); }
 
     .player-section { margin-bottom: 12px; }
-    .player-label {
-      font-size: 11px; letter-spacing: 0.25em;
-      text-transform: uppercase; color: var(--text-muted);
-      text-align: center; margin-bottom: 16px;
-    }
-    .player-wrapper {
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: #000;
-    }
-    video {
-      width: 100%;
-      display: block;
-      max-height: 520px;
-      background: #000;
-    }
-    video::-webkit-media-controls-panel { background: rgba(10,22,40,0.9); }
+    .player-label { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-muted); text-align: center; margin-bottom: 16px; }
+    .player-wrapper { border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); background: #000; }
+    video { width: 100%; display: block; max-height: 520px; background: #000; }
 
-    .subtitles-hint {
-      text-align: center; font-size: 12px;
-      color: var(--text-muted); margin-bottom: 40px; opacity: 0.7;
-    }
-    .subtitles-hint span {
-      display: inline-block;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 6px; padding: 2px 10px;
-      font-size: 11px; letter-spacing: 0.05em;
-      margin-left: 4px; vertical-align: middle;
-    }
+    .subtitles-hint { text-align: center; font-size: 12px; color: var(--text-muted); margin-bottom: 40px; opacity: 0.7; }
+    .subtitles-hint span { display: inline-block; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 2px 10px; font-size: 11px; letter-spacing: 0.05em; margin-left: 4px; vertical-align: middle; }
 
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 16px; margin-bottom: 40px;
-    }
-    .info-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 12px; padding: 16px 20px; text-align: center;
-    }
-    .info-card .label {
-      font-size: 10px; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;
-    }
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 40px; }
+    .info-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 16px 20px; text-align: center; }
+    .info-card .label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
     .info-card .valor { font-size: 15px; color: var(--text-main); }
 
-    .sinopsis {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 16px; padding: 32px 36px; margin-bottom: 48px;
-    }
-    .sinopsis h2 {
-      font-family: 'Playfair Display', serif; font-size: 13px;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 16px; font-weight: 400;
-    }
+    .sinopsis { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 32px 36px; margin-bottom: 48px; }
+    .sinopsis h2 { font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; font-weight: 400; }
     .sinopsis p { font-size: 15px; line-height: 1.85; color: var(--text-muted); }
 
-    .footer {
-      text-align: center; padding-top: 32px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
+    .footer { text-align: center; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.06); }
     .footer p { font-size: 12px; color: rgba(139,174,196,0.5); line-height: 1.8; }
     .footer .heart { color: var(--gold); }
 
@@ -174,6 +142,11 @@
 
 <main class="page">
 
+  <nav>
+    <a href="index.html" class="active">🌊 Puedo escuchar el mar</a>
+    <a href="pompoko.html">🌿 Pompoko</a>
+  </nav>
+
   <header class="header">
     <p class="dedicatoria">Una película para ti</p>
     <p class="titulo-jp">海がきこえる</p>
@@ -181,9 +154,8 @@
     <p class="subtitulo">Studio Ghibli · 1993</p>
     <div class="divider"></div>
     <p class="mensaje">
-      Te cree esta pagina web para que puedas ver esta película.<br>
-      Espero que la disfrutes tanto como yo quería que la vieras.<br>
-      Te amo
+      Pensé en ti cuando encontré esta película.<br>
+      Espero que la disfrutes tanto como yo quería que la vieras.
     </p>
     <p class="firma">— con cariño</p>
   </header>
@@ -193,13 +165,8 @@
     <div class="player-wrapper">
       <video controls preload="metadata" crossorigin="anonymous">
         <source src="https://media.githubusercontent.com/media/dawizdev/Para-Ignacia/main/bajo-el-mar.mp4" type="video/mp4" />
-        <track
-          kind="subtitles"
-          label="Español"
-          srclang="es"
-          src="https://media.githubusercontent.com/media/dawizdev/Para-Ignacia/main/subtitulos.vtt"
-          default
-        />
+        <track kind="subtitles" label="Español" srclang="es"
+          src="https://media.githubusercontent.com/media/dawizdev/Para-Ignacia/main/subtitulos.vtt" default />
         Tu navegador no soporta la reproducción de video.
       </video>
     </div>
@@ -233,6 +200,5 @@
   </footer>
 
 </main>
-
 </body>
 </html>
